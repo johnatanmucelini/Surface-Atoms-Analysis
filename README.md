@@ -1,6 +1,8 @@
 # Surface Atoms Analysis
 
-This *python* script analyzes which atoms of a molecule (in xyz file, for instance) are exposed to the vacuum, which could be considered *surface-atoms*.
+This *python* script analyzes which atoms of a molecule (in xyz file, for instance) are exposed to the vacuum, which could be considered *surface atoms*.
+
+![example](https://raw.githubusercontent.com/johnatanmucelini/surface_analysis_standalone/master/figure.png?token=AF3ZDJ5FLMWKX4UTVQEMSODAQCP72)
 
 I strongly recomend this analrecommend this analysis ys for the investigations of clusters/nanoclusters/nanostructures with more than 20 atoms. 
 
