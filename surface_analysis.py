@@ -222,30 +222,25 @@ def compute_ecn_dav(positions, print_convergence=True):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='This script calculate the atoms exposition to the vacuum.')
-    parser.add_argument('--mol', required=True, 
-            help='the molecules (xyz, geometry.in, etc) to analyze.')
-    parser.add_argument('--r_adatom', action='store', default=1.1,
-            help='the radius for the adatom radius. (Default=1.1)')
-    parser.add_argument('--r_atoms', action='store', default='',
-            help='the radius for the mol atoms. (Default=dav/2)')
-    parser.add_argument('--ssamples', action='store', default=1000,
-            help='the number of points to distribute over each atom. (Default=1000)')
-    parser.add_argument('--sp_file', action='store', default='',
-            help='if defined (ex: surf.xyz), the surface points found will be printed in this file.')
-    parser.add_argument('--save_json', action='store', default='',
-            help='if defined (ex: dados.json), all the data will be saved in a json file.')
+    parser.add_argument('--mol', '-m', nargs='+',                    help='One or more molecular files (xyz, geometry.in, etc) to analyze.')
+    parser.add_argument('--r_adatom',  action='store', default=1.1,  help='The radius of the adatom. (Default=1.1)')
+    parser.add_argument('--r_atoms',   nargs='*',                    help='This flag controls the radii of the atoms in molecular files. If not defined, the atomic radii will defined as half of the average bond distance. If a single float value was priveded, it will be the radius for every atom on the molecular files. If N float values were provided, were N is the number of atoms in the molecular files, they will be the radius for each atom following the sequence of atoms in the molecular file. (Default=dav/2)')
+    parser.add_argument('--ssamples',  action='store', default=1000, help='The (approximately) number of points to distribute over each atom. (Default=1000)')
+    parser.add_argument('--save_surf', action='store',               help='If defined (ex: surf.xyz), the position of the surface points found are writen in a xyz file with of H.')
+    parser.add_argument('--save_json', action='store',               help='If defined (ex: data.json), all the collected data are writen in a json file.')
     args = parser.parse_args()
  
-    mols_names = args.mol.split()
+    mols_names = args.mol
     adatom_radius = float(args.r_adatom)
     ssamples = int(args.ssamples)
-    sp_file = args.sp_file
+    sp_file = args.save_surf
     json_file = args.save_json
 
-    use_ecn = True
-    r_atoms = args.r_atoms.split()
-    if len(r_atoms) >= 1:
+    if args.r_atoms:
+        r_atoms = args.r_atoms
         use_ecn = False
+    else:
+        use_ecn = True
 
     # creating variables to save a json file
     if json_file:
@@ -255,6 +250,7 @@ if __name__ == '__main__':
         all_chemical_symbols = []
         all_ecn = []
         all_dav = []
+        all_radius = []
         all_is_surf = []
         all_exposition = []
 
@@ -285,26 +281,49 @@ if __name__ == '__main__':
                 ssamples=ssamples, sp_file=sp_file)
 
         # printing:
-        print('index chemical_element ecn dav is_surf exposition')
-        for i, (chemi_i, ecn_i, dav_i, is_surf_i, expos_i) in enumerate(zip(chemical_symbols, ecn, dav, is_surface, exposition)):
-            print(i+1, chemi_i, ecn_i, dav_i, is_surf_i, expos_i)
+        if use_ecn:
+            print('index chemical_element ecn dav radius is_surf exposition')
+            for i, (chemi_i, ecn_i, dav_i, radius_i, is_surf_i, expos_i) in enumerate(zip(chemical_symbols, ecn, dav, atomic_radius, is_surface, exposition)):
+                print(i+1, chemi_i, ecn_i, dav_i, radius_i, is_surf_i, expos_i)
+        else:
+            print('index chemical_element ecn radius is_surf exposition')
+            for i, (chemi_i, radius_i, is_surf_i, expos_i) in enumerate(zip(chemical_symbols, atomic_radius, is_surface, exposition)):
+                print(i+1, chemi_i, radius_i, is_surf_i, expos_i)
 
-        # saving mol data
+
+        # saving data of the current mol
         if json_file:
-            all_positions.append(positions)
-            all_chemical_symbols.append(chemical_symbols)
-            all_ecn.append(ecn)
-            all_dav.append(dav)
-            all_is_surf.append(is_surface)
-            all_exposition.append(exposition)
+            if use_ecn:
+                all_positions.append(positions)
+                all_chemical_symbols.append(chemical_symbols)
+                all_ecn.append(ecn)
+                all_dav.append(dav)
+                all_radius.append(atomic_radius)
+                all_is_surf.append(is_surface)
+                all_exposition.append(exposition)
+            else:
+                all_positions.append(positions)
+                all_chemical_symbols.append(chemical_symbols)
+                all_radius.append(atomic_radius)
+                all_is_surf.append(is_surface)
+                all_exposition.append(exposition)
 
-    # writing the data
+
+    # writing data of all mols
     if json_file:
-        meus_dados['mols'] = mols_names
-        meus_dados['chemical_symbols'] = all_chemical_symbols 
-        meus_dados['ecn'] = all_ecn
-        meus_dados['dav'] = all_dav
-        meus_dados['is_surf'] = all_is_surf
-        meus_dados['exposition'] = all_exposition
+        if use_ecn:
+            meus_dados['mols'] = mols_names
+            meus_dados['chemical_symbols'] = all_chemical_symbols 
+            meus_dados['ecn'] = all_ecn
+            meus_dados['dav'] = all_dav
+            meus_dados['radius'] = all_radius
+            meus_dados['is_surf'] = all_is_surf
+            meus_dados['exposition'] = all_exposition
+        else:
+            meus_dados['mols'] = mols_names
+            meus_dados['chemical_symbols'] = all_chemical_symbols
+            meus_dados['radius'] = all_radius
+            meus_dados['is_surf'] = all_is_surf
+            meus_dados['exposition'] = all_exposition
         print('Writing json_file: {}'.format(json_file))
         meus_dados.to_json(json_file)
