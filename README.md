@@ -69,7 +69,7 @@ optional arguments:
 
 ## Examples (and tests)
 
-To analyze a single molecule:
+To analyze a single molecule and save the script output:
 
 ```
 $ python surface_analysis.py --mol test_case/Ag_30_g_283_.xyz > output.txt
@@ -78,9 +78,9 @@ $ python surface_analysis.py --mol test_case/Ag_30_g_283_.xyz > output.txt
 To analyse all molecules and save the data in a json file:
 
 ```bash
-$ python surface_analysis.py --mol "$(ls test_case)" --json_file full_analysis.json > output2.txt
+$ python surface_analysis.py --mol ./test_case/* --save_json full_analysis.json
 ```
 
-## Cite us, please! :)
+## Cite me, please! :)
 
 If you employed this methodology, please, cite **J. Phys. Chem. C 2020, 124, 1, 1158–1164**.
