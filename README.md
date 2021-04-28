@@ -39,19 +39,23 @@ conda install -c conda-forge ase
 
 Script help messange:
 
-```bash
-usage: surface_analysis_std.py [-h] --mol MOL [--r_adatom R_ADATOM] [--r_atoms R_ATOMS] [--ssamples SSAMPLES] [--sp_file SP_FILE] [--save_json SAVE_JSON]
+```
+usage: surface_analysis.py [-h] --mol mol1 [mol2 ...] [--r_adatom val] [--ssamples val] [--r_atoms [val1 [val2 ...]]] [--save_surf file.xyz] [--save_json file.json]
 
-This script calculates the atoms' exposition to the vacuum.
+This script calculate the atoms exposition to the vacuum.
+
+required arguments:
+  --mol mol1 [mol2 ...]  One or more molecular files (xyz, geometry.in, etc) to analyze.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --mol MOL             the molecules (xyz, geometry.in, etc) to analyze.
-  --r_adatom R_ADATOM   the radius for the adatom radius. (Default=1.1)
-  --r_atoms R_ATOMS     the radius for the mol atoms. (Default=dav/2)
-  --ssamples SSAMPLES   the number of points to distribute over each atom. (Default=1000)
-  --sp_file SP_FILE     if defined (ex: surf.xyz), the surface points found will be printed in this file.
-  --json_file SAVE_JSON if defined (ex: dados.json), all the data will be saved in a json file.
+  --r_adatom val         The radius of the adatom. (Default=1.1)
+  --ssamples val         The (approximately) number of points to distribute over each atom. (Default=1000)
+  --r_atoms [val1 [val2 ...]]
+                         This flag controls the radii of the atoms in molecular files: If not defined, the atomic radii will defined as half of the average bond distance. If a single float value was
+                         priveded, it will be the radius for every atom on the molecular files. If N float values were provided, were N is the number of atoms in the molecular files, they will be the
+                         radius for each atom following the sequence of atoms in the molecular file. (Default=dav/2)
+  --save_surf file.xyz   If defined, the position of the surface points found are writen in this xyz file as H atoms.
+  --save_json file.json  If defined, all the collected data are writen in this json file.
 ```
 
 

@@ -221,13 +221,17 @@ def compute_ecn_dav(positions, print_convergence=True):
 
 
 if __name__ == '__main__':
+
     parser = argparse.ArgumentParser(description='This script calculate the atoms exposition to the vacuum.')
-    parser.add_argument('--mol', '-m', nargs='+',                    help='One or more molecular files (xyz, geometry.in, etc) to analyze.')
-    parser.add_argument('--r_adatom',  action='store', default=1.1,  help='The radius of the adatom. (Default=1.1)')
-    parser.add_argument('--r_atoms',   nargs='*',                    help='This flag controls the radii of the atoms in molecular files. If not defined, the atomic radii will defined as half of the average bond distance. If a single float value was priveded, it will be the radius for every atom on the molecular files. If N float values were provided, were N is the number of atoms in the molecular files, they will be the radius for each atom following the sequence of atoms in the molecular file. (Default=dav/2)')
-    parser.add_argument('--ssamples',  action='store', default=1000, help='The (approximately) number of points to distribute over each atom. (Default=1000)')
-    parser.add_argument('--save_surf', action='store',               help='If defined (ex: surf.xyz), the position of the surface points found are writen in a xyz file with of H.')
-    parser.add_argument('--save_json', action='store',               help='If defined (ex: data.json), all the collected data are writen in a json file.')
+    parser._action_groups.pop()
+    required = parser.add_argument_group('required arguments')
+    required.add_argument('--mol',       nargs='+',      metavar=('mol1','mol2'),  required=True, help='One or more molecular files (xyz, geometry.in, etc) to analyze.')
+    optional = parser.add_argument_group('optional arguments')
+    optional.add_argument('--r_adatom',  action='store', metavar='val', default=1.1,              help='The radius of the adatom. (Default=1.1)')
+    optional.add_argument('--ssamples',  action='store', metavar='val', default=1000,             help='The (approximately) number of points to distribute over each atom. (Default=1000)')
+    optional.add_argument('--r_atoms',   nargs='*',      metavar=('val1', 'val2'),                help='This flag controls the radii of the atoms in molecular files: If not defined, the atomic radii will defined as half of the average bond distance. If a single float value was priveded, it will be the radius for every atom on the molecular files. If N float values were provided, were N is the number of atoms in the molecular files, they will be the radius for each atom following the sequence of atoms in the molecular file. (Default=dav/2)')
+    optional.add_argument('--save_surf', action='store', metavar='file.xyz',                      help='If defined, the position of the surface points found are writen in this xyz file as H atoms.')
+    optional.add_argument('--save_json', action='store', metavar='file.json',                     help='If defined, all the collected data are writen in this json file.')
     args = parser.parse_args()
  
     mols_names = args.mol
