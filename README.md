@@ -40,7 +40,9 @@ conda install -c conda-forge ase
 Script help messange:
 
 ```
-usage: surface_analysis.py [-h] --mol mol1 [mol2 ...] [--r_adatom val] [--ssamples val] [--r_atoms [val1 [val2 ...]]] [--save_surf file.xyz] [--save_json file.json]
+usage: surface_analysis.py [-h] --mol mol1 [mol2 ...] [--r_adatom val] [--ssamples val]
+                           [--r_atoms [val1 [val2 ...]]] [--save_surf file.xyz]
+                           [--save_json file.json]
 
 This script calculate the atoms exposition to the vacuum.
 
@@ -49,12 +51,18 @@ required arguments:
 
 optional arguments:
   --r_adatom val         The radius of the adatom. (Default=1.1)
-  --ssamples val         The (approximately) number of points to distribute over each atom. (Default=1000)
+  --ssamples val         The (approximately) number of points to distribute over each atom.
+                         (Default=1000)
   --r_atoms [val1 [val2 ...]]
-                         This flag controls the radii of the atoms in molecular files: If not defined, the atomic radii will defined as half of the average bond distance. If a single float value was
-                         priveded, it will be the radius for every atom on the molecular files. If N float values were provided, were N is the number of atoms in the molecular files, they will be the
-                         radius for each atom following the sequence of atoms in the molecular file. (Default=dav/2)
-  --save_surf file.xyz   If defined, the position of the surface points found are writen in this xyz file as H atoms.
+                         This flag controls the radii of the atoms in molecular files: If not
+                         defined, the atomic radii will defined as half of the average bond
+                         distance. If a single float value was priveded, it will be the radius for
+                         every atom on the molecular files. If N float values were provided, were N
+                         is the number of atoms in the molecular files, they will be the radius for
+                         each atom following the sequence of atoms in the molecular file.
+                         (Default=dav/2)
+  --save_surf file.xyz   If defined, the position of the surface points found are writen in this xyz
+                         file as H atoms.
   --save_json file.json  If defined, all the collected data are writen in this json file.
 ```
 
