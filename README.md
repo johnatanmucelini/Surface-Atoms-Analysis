@@ -9,6 +9,7 @@ I strongly recomend this analysis for the investigations of structures with more
 
 For a detailed description of the methodology, I suggest the Section V of [this document](https://pubs.acs.org/doi/suppl/10.1021/acs.jpcc.9b09561/suppl_file/jp9b09561_si_001.pdf).
 
+It also calculates the effective coordination number: **J. Appl. Phys. 2011, 109, 023502**.
 
 ## For newbies:
 
